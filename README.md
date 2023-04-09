@@ -1,5 +1,5 @@
 # elevenlabs
-[elevenlabs](https://elevenlabs.io/) API
+A simple node.js wrapper for the [ElevenLabs](https://elevenlabs.io/) speech synthesis API.
 
 ## basic usage
 ```javascript

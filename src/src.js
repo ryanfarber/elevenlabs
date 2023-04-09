@@ -7,9 +7,8 @@ const fs = require("fs")
 const fsp = require("fs").promises
 const Logger = require("@ryanforever/logger").v2
 const logger = new Logger(__filename, {debug: true})
-const voiceCache = require("./voices.json")
+const voiceCache = require("../cache/voices.json")
 const dateformat = require("dateformat")
-const textFile = fs.readFileSync("./text.txt", "utf8")
 const templates = require("./templates.js")
 
 

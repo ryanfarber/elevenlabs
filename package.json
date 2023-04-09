@@ -1,5 +1,36 @@
 {
   "dependencies": {
-    "dotenv": "^16.0.3"
-  }
+    "@ryanforever/logger": "^5.0.2",
+    "axios": "^1.3.5",
+    "dateformat": "^4.6.3",
+    "dotenv": "^16.0.3",
+    "underscore": "^1.13.6"
+  },
+  "name": "@ryanforever/elevenlabs",
+  "description": "elevenlabs API",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "node test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ryanfarber/elevenlabs.git"
+  },
+  "keywords": [
+    "ai",
+    "voice",
+    "generator",
+    "tts",
+    "text",
+    "to",
+    "speech",
+    "elevenlabs"
+  ],
+  "author": "ryan forever",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ryanfarber/elevenlabs/issues"
+  },
+  "homepage": "https://github.com/ryanfarber/elevenlabs#readme"
 }

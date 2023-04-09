@@ -3,7 +3,7 @@
 require("dotenv").config()
 const fs = require("fs")
 const TTS = require("./src")
-const tts = new Elevenlabs({
+const tts = new TTS({
 	key: process.env.KEY
 })
 const input = fs.readFileSync("./input.txt", "utf8")

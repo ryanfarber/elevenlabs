@@ -6,7 +6,7 @@ const TTS = require("./src")
 const tts = new TTS({
 	key: process.env.KEY
 })
-const input = fs.readFileSync("./input.txt", "utf8")
+const input = fs.readFileSync("./input/input.txt", "utf8")
 console.log(tts)
 
 // tts.syncVoices().then(console.log)

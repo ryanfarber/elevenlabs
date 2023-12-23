@@ -21,6 +21,7 @@ class Elevenlabs {
 		const savePath = config.savePath || "../output"
 		const cache = new Cache(path.join(__dirname, "../cache/cache.json"))
 		const logger = new Logger("elevenlabs", {debug: config.debug ?? false})
+		const {debug, log} = logger
 
 		axios.defaults.baseURL = "https://api.elevenlabs.io/v1"
 		axios.defaults.headers.common["xi-api-key"] = key
@@ -31,9 +32,9 @@ class Elevenlabs {
 		this.syncVoices = async function() {
 			logger.debug("syncing voices")
 			let data = await this.getVoices()
-			data = data.map(x => {
-				return _.pick(x, "name", "voice_id")
-			})
+			// data = data.map(x => {
+			// 	return _.pick(x, "name", "voice_id")
+			// })
 			// let obj = {
 			// 	updated: Date.now(),
 			// 	voices: data
@@ -138,6 +139,34 @@ class Elevenlabs {
 			}
 
 			
+		}
+
+
+		/** batch run scripts and voice combinations */
+		this.batch = async function({voices = [], scripts = [], variations = 1, options = {}}) {
+			log(`batch generating ${scripts.length} script(s) with ${voices.length} voice(s):\n${list(voices)}\n`)
+
+			let collector = []
+			let total = scripts.length * voices.length
+
+			let i = 1
+			for (let script of scripts) {
+
+				for (let voice of voices) {
+					debug(`batch: ${i}/${total}\nvoice: ${voice}\nscript: "${script}"`)
+					let res = await this.generate(script, {
+						voice,
+						model: "elecven_multilingual_v1",
+						...options,
+						num: variations
+					})
+					debug(`finished batch ${i}`)
+					collector.push(res)
+				}
+				i++
+			}
+			debug(`done ✅`)
+			return collector
 		}
 
 		/** get info about user profile */

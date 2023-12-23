@@ -12,7 +12,7 @@ class Template {
 
 		if (!this.name) throw new Error(`template must have a name`)
 		if (!this.voice) throw new Error(`template must have a voice i.e. name of voice model`)
-
+		
 	}
 }
 

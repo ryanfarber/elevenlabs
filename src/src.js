@@ -38,44 +38,47 @@ class Elevenlabs {
 		const voiceCacheUpdateThreshold = 1000 * 30
 
 
-		this.syncVoices = async function() {
-			logger.debug("syncing voices")
-			let data = await this.getVoices()
-			// data = data.map(x => {
-			// 	return _.pick(x, "name", "voice_id")
-			// })
-			// let obj = {
-			// 	updated: Date.now(),
-			// 	voices: data
-			// }
-			// let dir = path.join(__dirname, "../cache/voices.json")
-			// await fsp.writeFile(dir, JSON.stringify(obj, null, 2))
-			
-			cache.set("voices", data)
-			logger.debug("voices saved")
-			return data
-		}
+		
 
 		/** get voices */
 		this.getVoices = async function() {
+			debug(`getting voices`)
 			let res = await axios.get("/voices")
 			let data = res?.data?.voices
 			return data
-		}
+		}	
 
+
+		/** get models */
 		this.getModels = async function() {
+			debug(`getting models`)
 			let res = await axios.get("/models")
 			let data = res.data
 			return data
 		}
 
+		/** sync models */
 		this.syncModels = async function() {
-			let models = await this.getModels()
-			cache.set("models", models)
+			debug(`syncing models...`)
+			let data = await this.getModels()
+			cache.set("models", data)
+			debug(`models saved to cache`)
+			return data
 		}
 
+		/** sync voices */
+		this.syncVoices = async function() {
+			debug("syncing voices")
+			let data = await this.getVoices()
+			cache.set("voices", data)
+			debug("voices saved to cache")
+			return data
+		}
+
+		/** sync models and voices */
 		this.sync = async function() {
-			logger.debug(`syncing...`)
+			debug(`syncing...`)
+			cache.set("updatedAt", Date.now())
 			this.syncModels()
 			this.syncVoices()
 		}
@@ -110,8 +113,8 @@ class Elevenlabs {
 			let truncatedText = truncateString(text)
 			
 
-			logger.debug(`generating speech using "${voiceData.name}"`)
-			logger.debug(`generating ${num} variation(s)`)
+			debug(`generating speech using "${voiceData.name}"`)
+			debug(`generating ${num} variation(s)`)
 			// console.log(`\n"${text}"\n`)
 
 			if (!fs.existsSync("../output")) fs.mkdirSync("../output")
@@ -138,9 +141,9 @@ class Elevenlabs {
 				data.pipe(writer)
 
 				writer.on("finish", async () => {
-					logger.debug("✅ saved")
+					debug("✅ saved")
 					let remain = await this.getRemainingCharacters()
-					logger.debug(`you have ${remain} characters remaining`)
+					debug(`you have ${remain} characters remaining`)
 				})
 				writer.on("error", err => {
 					logger.error(err)

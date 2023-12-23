@@ -12,6 +12,9 @@ const dateformat = require("dateformat")
 const templates = require("./templates.js")
 const path = require("path")
 const Cache = require("@ryanforever/local-database")
+const Template = require("./Template.js")
+
+
 
 
 class Elevenlabs {
@@ -21,7 +24,13 @@ class Elevenlabs {
 		const savePath = config.savePath || "../output"
 		const cache = new Cache(path.join(__dirname, "../cache/cache.json"))
 		const logger = new Logger("elevenlabs", {debug: config.debug ?? false})
+		let userTemplates = config.templates || []
 		const {debug, log} = logger
+
+		userTemplates = new Map(userTemplates.map(x => {
+			let template = new Template(x)
+			return [template.name, template]
+		}))
 
 		axios.defaults.baseURL = "https://api.elevenlabs.io/v1"
 		axios.defaults.headers.common["xi-api-key"] = key
@@ -184,7 +193,8 @@ class Elevenlabs {
 			return charsLeft
 		}
 
-		this.templates = templates
+		this.templates = userTemplates
+
 		function truncateString(str, maxLength) {
 			str = str.replace(/\.|\?|\,|'|"|\!/gi, "").trim()
 			maxLength = maxLength || 20
